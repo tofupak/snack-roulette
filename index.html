@@ -95,8 +95,7 @@
     </div>
 
     <div class="controls">
-      <textarea id="snacksInput" placeholder="Enter snacks, one per line">Chips
-Chicken Breast
+      <textarea id="snacksInput" placeholder="Enter snacks, one per line">Chicken Breast
 Meat Stick
 Protein Chips
 Protein Bar
@@ -200,7 +199,6 @@ Shake Shake Shake</textarea>
 
   function rebuild() {
     snacks = textarea.value.split('\n').map(s => s.trim()).filter(Boolean);
-    localStorage.setItem('snacks', textarea.value);
     resultEl.textContent = '';
     spinBtn.disabled = snacks.length < 2;
     canvas.style.transform = `rotate(${currentRotation = 0}deg)`;
@@ -230,14 +228,15 @@ Shake Shake Shake</textarea>
     }, 2700);
   }
 
-  (function init(){
-    const saved = localStorage.getItem('snacks');
-    const params = new URLSearchParams(location.search);
-    const fromURL = params.get('list');
-    if (fromURL) textarea.value = decodeURIComponent(fromURL).split('|').join('\n');
-    else if (saved) textarea.value = saved;
-    rebuild();
-  })();
+(function init(){
+  const params  = new URLSearchParams(location.search);
+  const fromURL = params.get('list');
+  if (fromURL) {
+    textarea.value = decodeURIComponent(fromURL).split('|').join('\n');
+  }
+  // else: keep whatever is in HTML (your new default)
+  rebuild();
+})();
 
   buildBtn.addEventListener('click', rebuild);
   spinBtn.addEventListener('click', spin);
